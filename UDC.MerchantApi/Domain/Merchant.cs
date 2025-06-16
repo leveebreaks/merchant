@@ -1,6 +1,6 @@
 ﻿namespace UDC.MerchantApi.Domain;
 
-public class Merchant
+public class Merchant : IAuditable
 {
     public int Id { get; set; }
     public string Name { get; set; }
