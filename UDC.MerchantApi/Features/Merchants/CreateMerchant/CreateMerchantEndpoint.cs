@@ -1,4 +1,5 @@
-﻿using UDC.MerchantApi.Domain;
+﻿using AutoMapper;
+using UDC.MerchantApi.Domain;
 using UDC.MerchantApi.Infrastructure.Persistance;
 
 namespace UDC.MerchantApi.Features.Merchants.CreateMerchant;
@@ -7,7 +8,7 @@ public static class CreateMerchantEndpoint
 {
     public static RouteGroupBuilder MapCreateMerchant(this RouteGroupBuilder routeGroup)
     {
-        routeGroup.MapPost("/", async (CreateMerchantRequest request, AppDbContext db) =>
+        routeGroup.MapPost("/", async (CreateMerchantRequest request, AppDbContext db, IMapper mapper) =>
         {
             var merchant = new Merchant
             {
@@ -19,7 +20,7 @@ public static class CreateMerchantEndpoint
             db.Merchants.Add(merchant);
             await db.SaveChangesAsync();
 
-            return Results.Created($"/api/merchants/{merchant.Id}", merchant);
+            return Results.Created($"/api/merchants/{merchant.Id}", mapper.Map<MerchantDto>(merchant));
         });
 
         return routeGroup;

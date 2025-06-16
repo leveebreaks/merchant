@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using UDC.MerchantApi.Domain;
 
@@ -24,6 +25,17 @@ public class AppDbContext : DbContext
             }
         }
         
+        foreach (EntityEntry<ISoftDeletable> entry in ChangeTracker.Entries<ISoftDeletable>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Deleted:
+                    entry.Entity.IsDeleted = true;
+                    entry.State = EntityState.Modified;
+                    break;
+            }
+        }
+        
         return base.SaveChangesAsync(cancellationToken);
     }
 
@@ -35,5 +47,22 @@ public class AppDbContext : DbContext
             e.Property(m => m.Email).IsRequired();
             e.Property(m => m.Category).HasConversion<string>().IsRequired();
         });
+        
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            if (typeof(ISoftDeletable).IsAssignableFrom(entityType.ClrType))
+            {
+                var method = typeof(AppDbContext)
+                    .GetMethod(nameof(SetSoftDeleteFilter), BindingFlags.NonPublic | BindingFlags.Static)!
+                    .MakeGenericMethod(entityType.ClrType);
+
+                method.Invoke(null, [modelBuilder]);
+            }
+        }
+    }
+    
+    private static void SetSoftDeleteFilter<T>(ModelBuilder modelBuilder) where T : class, ISoftDeletable
+    {
+        modelBuilder.Entity<T>().HasQueryFilter(e => !e.IsDeleted);
     }
 }
