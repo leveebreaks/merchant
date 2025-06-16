@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 using UDC.MerchantApi.Features.Merchants.CreateMerchant;
+using UDC.MerchantApi.Features.Merchants.DeleteMerchant;
 using UDC.MerchantApi.Features.Merchants.GetMerchants;
 using UDC.MerchantApi.Features.Merchants.UpdateMerchant;
 using UDC.MerchantApi.Infrastructure.Persistance;
@@ -28,10 +29,10 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 var merchantsGroup = app.MapGroup("/api/merchants");
-
 merchantsGroup
     .MapGetMerchants()
     .MapCreateMerchant()
-    .MapUpdateMerchant();
+    .MapUpdateMerchant()
+    .MapDeleteMerchant();
     
 app.Run();
