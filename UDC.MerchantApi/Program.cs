@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using UDC.MerchantApi.Data;
+using Scalar.AspNetCore;
+using UDC.MerchantApi.Features.Merchants.CreateMerchant;
 using UDC.MerchantApi.Features.Merchants.GetMerchants;
+using UDC.MerchantApi.Features.Merchants.UpdateMerchant;
+using UDC.MerchantApi.Infrastructure.Persistance;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,32 +20,16 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
 
-var summaries = new[]
-{
-    "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-};
+var merchantsGroup = app.MapGroup("/api/merchants");
 
-app.MapGet("/weatherforecast", () =>
-    {
-        var forecast = Enumerable.Range(1, 5).Select(index =>
-                new WeatherForecast
-                (
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-            .ToArray();
-        return forecast;
-    })
-    .WithName("GetWeatherForecast");
-
+merchantsGroup
+    .MapGetMerchants()
+    .MapCreateMerchant()
+    .MapUpdateMerchant();
+    
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

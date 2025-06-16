@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UDC.MerchantApi.Domain;
 
-namespace UDC.MerchantApi.Data;
+namespace UDC.MerchantApi.Infrastructure.Persistance;
 
 public class AppDbContext : DbContext
 {
@@ -15,7 +15,7 @@ public class AppDbContext : DbContext
         {
             e.Property(m => m.Name).IsRequired().HasMaxLength(100);
             e.Property(m => m.Email).IsRequired();
-            e.Property(m => m.Category).IsRequired();
+            e.Property(m => m.Category).HasConversion<string>().IsRequired();
             e.Property(m => m.CreatedAt).HasDefaultValueSql("GetUtcDate()");
         });
     }
