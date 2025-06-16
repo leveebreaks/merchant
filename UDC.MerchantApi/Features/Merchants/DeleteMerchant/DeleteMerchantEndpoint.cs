@@ -12,7 +12,15 @@ public static class DeleteMerchantEndpoint
         {
             if (await db.Merchants.FindAsync(id) is { } merchant)
             {
-                db.Merchants.Remove(merchant);
+                // extract this to a generic repo
+                if (merchant is ISoftDeletable)
+                {
+                    merchant.IsDeleted = true;
+                }
+                else
+                {
+                    db.Merchants.Remove(merchant);
+                }
                 await db.SaveChangesAsync();
                 return Results.Ok(mapper.Map<MerchantDto>(merchant));
             }

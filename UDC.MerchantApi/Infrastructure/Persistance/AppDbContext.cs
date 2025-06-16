@@ -7,7 +7,7 @@ namespace UDC.MerchantApi.Infrastructure.Persistance;
 
 public class AppDbContext : DbContext
 {
-    public DbSet<Merchant> Merchants { get; set; }
+    public DbSet<Merchant> Merchants => Set<Merchant>();
     
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
@@ -21,17 +21,6 @@ public class AppDbContext : DbContext
             {
                 case EntityState.Added:
                     entry.Entity.CreatedAt = utcNow;
-                    break;
-            }
-        }
-        
-        foreach (EntityEntry<ISoftDeletable> entry in ChangeTracker.Entries<ISoftDeletable>())
-        {
-            switch (entry.State)
-            {
-                case EntityState.Deleted:
-                    entry.Entity.IsDeleted = true;
-                    entry.State = EntityState.Modified;
                     break;
             }
         }
