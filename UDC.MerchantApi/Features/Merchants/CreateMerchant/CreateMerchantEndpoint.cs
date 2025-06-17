@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using FluentValidation;
+using UDC.MerchantApi.Common;
 using UDC.MerchantApi.Domain;
 using UDC.MerchantApi.Infrastructure.Persistance;
 
@@ -8,8 +10,15 @@ public static class CreateMerchantEndpoint
 {
     public static RouteGroupBuilder MapCreateMerchant(this RouteGroupBuilder routeGroup)
     {
-        routeGroup.MapPost("/", async (CreateMerchantRequest request, AppDbContext db, IMapper mapper) =>
+        routeGroup.MapPost("/", async (
+            CreateMerchantRequest request, 
+            AppDbContext db, 
+            IMapper mapper, 
+            IValidator<CreateMerchantRequest> validator) =>
         {
+            var validationResult = await request.ValidateRequest(validator);
+            if (validationResult is not null) return validationResult;
+            
             var merchant = new Merchant
             {
                 Name = request.Name,

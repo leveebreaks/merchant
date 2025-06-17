@@ -3,9 +3,9 @@ using UDC.MerchantApi.Domain;
 
 namespace UDC.MerchantApi.Features.Merchants;
 
-public class MerchantProfile : Profile
+public class MerchantMappingProfile : Profile
 {
-    public MerchantProfile()
+    public MerchantMappingProfile()
     {
         CreateMap<MerchantDto, Merchant>();
         CreateMap<Merchant, MerchantDto>();
