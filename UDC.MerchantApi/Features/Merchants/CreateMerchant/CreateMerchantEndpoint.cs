@@ -2,7 +2,6 @@
 using FluentValidation;
 using UDC.MerchantApi.Common;
 using UDC.MerchantApi.Domain;
-using UDC.MerchantApi.Infrastructure.Persistance;
 
 namespace UDC.MerchantApi.Features.Merchants.CreateMerchant;
 

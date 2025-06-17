@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UDC.MerchantApi.Domain;
 
-namespace UDC.MerchantApi.Infrastructure.Persistance;
+namespace UDC.MerchantApi.Infrastructure.Persistence;
 
 public class Repository<T> : IRepository<T> where T : class
 {

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using UDC.MerchantApi.Infrastructure.Persistance;
+using UDC.MerchantApi.Infrastructure.Persistence;
 
 #nullable disable
 

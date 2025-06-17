@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using UDC.MerchantApi.Domain;
-using UDC.MerchantApi.Infrastructure.Persistance;
+using UDC.MerchantApi.Infrastructure.Persistence;
 
 namespace UDC.MerchantApi.Features.Merchants;
 

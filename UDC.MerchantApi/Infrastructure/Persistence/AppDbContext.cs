@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using UDC.MerchantApi.Domain;
 
-namespace UDC.MerchantApi.Infrastructure.Persistance;
+namespace UDC.MerchantApi.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext
 {

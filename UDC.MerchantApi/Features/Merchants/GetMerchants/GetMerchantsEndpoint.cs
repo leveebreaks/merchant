@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using UDC.MerchantApi.Domain;
-using UDC.MerchantApi.Infrastructure.Persistance;
 
 namespace UDC.MerchantApi.Features.Merchants.GetMerchants;
 

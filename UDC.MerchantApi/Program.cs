@@ -10,7 +10,7 @@ using UDC.MerchantApi.Features.Merchants.CreateMerchant;
 using UDC.MerchantApi.Features.Merchants.DeleteMerchant;
 using UDC.MerchantApi.Features.Merchants.GetMerchants;
 using UDC.MerchantApi.Features.Merchants.UpdateMerchant;
-using UDC.MerchantApi.Infrastructure.Persistance;
+using UDC.MerchantApi.Infrastructure.Persistence;
 using UDC.MerchantApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,9 +26,23 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddScoped<IMerchantRepository,  MerchantRepository>();
+builder.Services.AddScoped<IMerchantRepository, MerchantRepository>();
+
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
+
+await app.Services.EnsureSeededAsync();
+
+app.UseCors();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -5,14 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using UDC.MerchantApi.Infrastructure.Persistance;
+using UDC.MerchantApi.Infrastructure.Persistence;
 
 #nullable disable
 
 namespace UDC.MerchantApi.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250615185355_InitialCreate")]
+    [Migration("20250617222659_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -38,13 +38,14 @@ namespace UDC.MerchantApi.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GetUtcDate()");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
