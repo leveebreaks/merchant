@@ -1,4 +1,8 @@
-﻿using UDC.MerchantApi.Infrastructure.Persistance;
+﻿using AutoMapper;
+using FluentValidation;
+using UDC.MerchantApi.Common;
+using UDC.MerchantApi.Domain;
+using UDC.MerchantApi.Infrastructure.Persistance;
 
 namespace UDC.MerchantApi.Features.Merchants.UpdateMerchant;
 
@@ -6,9 +10,17 @@ public static class UpdateMerchantEndpoint
 {
     public static RouteGroupBuilder MapUpdateMerchant(this RouteGroupBuilder group)
     {
-        group.MapPut("/{id:int}", async (int id, UpdateMerchantRequest request, AppDbContext db) =>
+        group.MapPut("/{id:int}", async (
+            int id, 
+            UpdateMerchantRequest request, 
+            IMerchantRepository repository, 
+            IValidator<UpdateMerchantRequest> validator,
+            IMapper mapper) =>
         {
-            var merchant = await db.Merchants.FindAsync(id);
+            var validationResult = await request.ValidateRequest(validator);
+            if (validationResult is not null) return validationResult;
+            
+            var merchant = await repository.GetByIdAsync(id);
             if (merchant == null)
                 return Results.NotFound();
 
@@ -16,8 +28,8 @@ public static class UpdateMerchantEndpoint
             merchant.Email = request.Email;
             merchant.Category = request.Category;
 
-            await db.SaveChangesAsync();
-            return Results.Ok(merchant);
+            await repository.SaveChangesAsync();
+            return Results.Ok(mapper.Map<MerchantDto>(merchant));
         });
 
         return group;

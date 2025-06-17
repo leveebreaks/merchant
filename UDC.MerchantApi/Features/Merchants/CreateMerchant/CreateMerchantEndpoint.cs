@@ -12,7 +12,7 @@ public static class CreateMerchantEndpoint
     {
         routeGroup.MapPost("/", async (
             CreateMerchantRequest request, 
-            AppDbContext db, 
+            IMerchantRepository repository, 
             IMapper mapper, 
             IValidator<CreateMerchantRequest> validator) =>
         {
@@ -26,8 +26,8 @@ public static class CreateMerchantEndpoint
                 Category = request.Category,
             };
 
-            db.Merchants.Add(merchant);
-            await db.SaveChangesAsync();
+            await repository.AddAsync(merchant);
+            await repository.SaveChangesAsync();
 
             return Results.Created($"/api/merchants/{merchant.Id}", mapper.Map<MerchantDto>(merchant));
         });

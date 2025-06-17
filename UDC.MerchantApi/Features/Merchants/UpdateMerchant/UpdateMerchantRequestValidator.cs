@@ -8,6 +8,6 @@ public class UpdateMerchantRequestValidator : AbstractValidator<UpdateMerchantRe
     {
         RuleFor(x => x.Name).MaximumLength(100).NotEmpty().WithMessage("Name is required");
         RuleFor(x => x.Email).EmailAddress().NotEmpty().WithMessage("Email is required");
-        RuleFor(x => x.Category).NotEmpty().WithMessage("Category is required");
+        RuleFor(x => x.Category).IsInEnum().WithMessage("Category must be a valid enum.");
     }
 }

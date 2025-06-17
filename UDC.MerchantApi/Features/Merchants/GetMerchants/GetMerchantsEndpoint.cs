@@ -10,20 +10,22 @@ public static class GetMerchantsEndpoint
 {
     public static RouteGroupBuilder MapGetMerchants(this RouteGroupBuilder routeGroup)
     {
-        routeGroup.MapGet("/", async (string name, string category, AppDbContext db, IMapper mapper) =>
+        routeGroup.MapGet("/", async (
+            string? name,
+            string? category, 
+            IMerchantRepository repository, 
+            IMapper mapper) =>
         {
-            IQueryable<Merchant> query = db.Merchants;
-            if (!string.IsNullOrWhiteSpace(name))
+            Category? categoryEnum = null;
+            if (!string.IsNullOrWhiteSpace(category) && Enum.TryParse(category, out Category parsedCategory))
             {
-                query = query.Where(m => m.Name == name);
-            } 
-            else if (!string.IsNullOrWhiteSpace(category))
-            {
-                Enum.TryParse(category, true, out Category categoryEnum);
-                query = query.Where(m => m.Category == categoryEnum);
+                categoryEnum = parsedCategory;
             }
-            var merchants = await query.Select(x => mapper.Map<MerchantDto>(x)).ToListAsync();
-            return Results.Ok(merchants);
+            
+            var merchants = 
+                await repository
+                    .GetFilteredAsync(categoryEnum, name);
+            return Results.Ok(merchants.Select(mapper.Map<MerchantDto>));
         });
         
         return routeGroup;

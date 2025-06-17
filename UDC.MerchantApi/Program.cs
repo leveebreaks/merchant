@@ -1,6 +1,11 @@
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using FluentValidation;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
+using UDC.MerchantApi.Domain;
+using UDC.MerchantApi.Features.Merchants;
 using UDC.MerchantApi.Features.Merchants.CreateMerchant;
 using UDC.MerchantApi.Features.Merchants.DeleteMerchant;
 using UDC.MerchantApi.Features.Merchants.GetMerchants;
@@ -20,6 +25,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddScoped<IMerchantRepository,  MerchantRepository>();
 
 var app = builder.Build();
 
