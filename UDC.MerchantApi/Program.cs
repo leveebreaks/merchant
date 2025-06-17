@@ -5,6 +5,7 @@ using UDC.MerchantApi.Features.Merchants.DeleteMerchant;
 using UDC.MerchantApi.Features.Merchants.GetMerchants;
 using UDC.MerchantApi.Features.Merchants.UpdateMerchant;
 using UDC.MerchantApi.Infrastructure.Persistance;
+using UDC.MerchantApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +27,8 @@ if (app.Environment.IsDevelopment())
     app.MapScalarApiReference();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+app.UseMiddleware<ErrorHandlerMiddleware>();
 
 var merchantsGroup = app.MapGroup("/api/merchants");
 merchantsGroup
